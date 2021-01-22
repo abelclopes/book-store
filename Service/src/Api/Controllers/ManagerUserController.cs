@@ -20,17 +20,14 @@ namespace Api.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class UserInfoController : BaseController
+    public class ManagerUserController : BaseController
     {
-
-        private readonly ILogger<UserInfoController> _logger;
-        
-        public UserInfoController(IContext context, ILogger<UserInfoController> logger)
+        private readonly ILogger<ManagerUserController> _logger;
+        public ManagerUserController(IContext context, ILogger<ManagerUserController> logger)
         : base(context)
         {
             _logger = logger;
         }
-
         [HttpGet]
         [Authorize]
         public UserInfo GetInfo()
@@ -43,17 +40,21 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        [Route("login")]
-        public async Task<ActionResult<dynamic>> Authenticate([FromBody]User model)
+        [Route("Register")]
+        public async Task<ActionResult<UserToken>> Register([FromBody]UserPayLoad model)
         {
-            var users = _context.Users;
             // Recupera o usuário
-            var user = UserRepository.Get(model.Username, model.Password, users);
+            var user = UserRepository.Add(model.Username, model.Password);
 
             // Verifica se o usuário existe
-            if (user == null)
+            if (user == null)                
                 return NotFound(new { message = "Usuário ou senha inválidos" });
 
+            _context.Users.Add(user);
+      
+            //_context.UsuarioPermissoes.Add(usuarioPermissoes);
+            await _context.SaveChangesAsync();
+            
             // Gera o Token
             var token = await Task.FromResult(TokenService.GenerateToken(user));
 
@@ -61,7 +62,7 @@ namespace Api.Controllers
             user.Password = "";
             
             // Retorna os dados
-            return new 
+            return new UserToken
             {
                 User = user,
                 Token = token

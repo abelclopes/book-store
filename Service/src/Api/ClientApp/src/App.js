@@ -1,22 +1,32 @@
-import React, { Component } from 'react';
-import { Route } from 'react-router';
+import React from "react";
 import { Layout } from './components/Layout';
-import { Home } from './components/Home';
-import { FetchData } from './components/FetchData';
-import { Counter } from './components/Counter';
-
 import './custom.css'
+import Routes from './router/routes';
+import { createGlobalStyle } from 'styled-components'
 
-export default class App extends Component {
-  static displayName = App.name;
+import "font-awesome/css/font-awesome.css";
 
-  render () {
+createGlobalStyle`
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  outline: 0;
+}
+body, html {
+  background: #eee;
+  font-family: 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
+  text-rendering: optimizeLegibility !important;
+  -webkit-font-smoothing: antialiased !important;
+  height: 100%;
+  width: 100%;
+}
+`;
+const App = ()=> {
     return (
       <Layout>
-        <Route exact path='/' component={Home} />
-        <Route path='/counter' component={Counter} />
-        <Route path='/fetch-data' component={FetchData} />
+        <Routes />
       </Layout>
     );
-  }
 }
+export default App ;

@@ -1,4 +1,9 @@
+using System;
+using System.IO;
 using System.Text;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,16 +14,36 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authorization;
+
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Net.Http.Headers;
 using System.Text.Json;
+using System.Text;
+using System.Reflection;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http.Features;
+
+using NSwag.Generation.Processors.Security;
 
 using Api.authConfigurarion;
 
+using Domain.Interface;
+
 using Infraestructure;
+using Infraestructure.Data;
+
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Microsoft.OpenApi.Models;
+
+
+using Microsoft.AspNetCore.ResponseCompression;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Api
 {
@@ -68,13 +93,30 @@ namespace Api
                 configuration.RootPath = "ClientApp/build";
             });
            
-
+            ResolveDependencies(services);
             // Register the Swagger services
+            // services.AddSwaggerDocument();
+            // Register the Swagger generator, defining one or more Swagger documents
+            
             services.AddSwaggerDocument();
+            // services.AddSwaggerGen(c =>
+            // {
+            //     c.SwaggerDoc("v1", new { Title = "Gerenciador de Propostas API", Version = "v1" });
+            //     c.AddSecurityDefinition("Bearer", new ApiKeyScheme { In = "header", Description = "Please enter JWT with Bearer into field", Name = "Authorization", Type = "apiKey" });
+            //     c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {
+            //         { "Bearer", Enumerable.Empty<string>() },
+            //     });
+            // });
             
         }
+       private static void ResolveDependencies(IServiceCollection services)
+        {
+            services.AddScoped<IContext, ApplicationDbContext>();
+            services.AddScoped<IActivityLog, FileSystemActivityLog>();
+            services.AddScoped<IErrorLog, FileSystemErrorLog>();
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        }
+        
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -124,6 +166,12 @@ namespace Api
                 }
             });
             
+             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+
+                context.Seed();
+            }
             
         }
     }

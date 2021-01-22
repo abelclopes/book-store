@@ -1,25 +1,39 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Identity.Core;
 using Microsoft.AspNetCore.Authorization;
-using Api.Services;
-using Api.Repository;
-using Domain;
 
+using Api.Repository;
+using Api.Services;
+
+using Domain;
+using Domain.Helpers;
+using Domain.Interface;
+
+using Api.Model;
 
 namespace Api.Controllers
 {
-    [Route("v1/account")]
-    public class HomeController : Controller
+    [Route("api/v1/[controller]")]
+    public class HomeController : BaseController
     {
+        private readonly ILogger<HomeController> _logger;
+        public HomeController(IContext context, ILogger<HomeController> logger)
+        : base(context)
+        {
+            _logger = logger;
+        }
         [HttpPost]
         [Route("login")]
         [AllowAnonymous]
-        public async Task<ActionResult<dynamic>> Authenticate([FromBody]User model)
+        public async Task<ActionResult<dynamic>> Authenticate([FromBody] UserPayLoad model)
         {
-            var user = UserRepository.Get(model.Username, model.Password);
+            var users = _context.Users;
+            var user = UserRepository.Get(model.Username, model.Password,users);
 
             if (user == null)
                 return NotFound(new { message = "Usuário ou senha inválidos" });
