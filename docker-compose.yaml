@@ -1,0 +1,12 @@
+version: '3.6'
+
+networks: 
+  dockersql-network:
+    driver: bridge
+
+services:
+  sql.database:
+    container_name: dockersql.database
+    image: microsoft/mssql-server-linux:2017-latest
+    networks:
+      - dockersql-network
