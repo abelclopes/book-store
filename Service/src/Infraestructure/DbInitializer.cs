@@ -92,11 +92,11 @@ namespace Infraestructure.Data
             {
                 var Roles = new Role[]
                 {
-                   new Role { Id = Guid.NewGuid(), Name = "Administrador", Nivel = 1},
-                   new Role { Id = Guid.NewGuid(), Name = "Analista De Compras", Nivel = 2},
-                   new Role { Id = Guid.NewGuid(), Name = "Analista Financeiro", Nivel = 3},
-                   new Role { Id = Guid.NewGuid(), Name = "Diretor Financeiro", Nivel = 4},
-                   new Role { Id = Guid.NewGuid(), Name = "Vendedor", Nivel = 5},
+                   new Role { Id = Guid.Parse("2A367317-7BF8-45A2-89D5-74B8E8D54D3B"), Name = "Administrador", Nivel = 1},
+                   new Role { Id = Guid.Parse("D1FEA121-AF1A-4C4F-A823-D22114E8766A"), Name = "Analista De Compras", Nivel = 2},
+                   new Role { Id = Guid.Parse("5B04367F-828A-476C-96DB-AFC64F84809E"), Name = "Analista Financeiro", Nivel = 3},
+                   new Role { Id = Guid.Parse("2BBA1D8C-276B-4631-97D6-5C3E08C01720"), Name = "Diretor Financeiro", Nivel = 4},
+                   new Role { Id = Guid.Parse("348C3E6E-4CBE-4BFD-9872-2FB6C8E79F47"), Name = "Vendedor", Nivel = 5},
                 };
                 context.Roles.AddRange(Roles);
                 myRoles = Roles.ToList();
@@ -112,12 +112,17 @@ namespace Infraestructure.Data
                             Cpf = "99999999999",
                             Username = "abellopes",
                             Email = "abellopes@gmail.com" ,
-                            Password = "2242461295221015719538209212227614317113501631961762",                            
+                            Password = "2242461295221015719538209212227614317113501631961762",
+                            Role= context.Roles.Any()? context.Roles.FirstOrDefault(x=> x.Id.ToString() == "2A367317-7BF8-45A2-89D5-74B8E8D54D3B").Name : myRoles.FirstOrDefault().Name
                     },
                 };
                 
                 context.Users.AddRange(users);
-                context.UserRoles.Add(new UserRole(users.AsQueryable().FirstOrDefault(), myRoles.AsQueryable().FirstOrDefault()));
+
+                var UserRole = myRoles.Any() ? myRoles.FirstOrDefault() : context.Roles.FirstOrDefault(x => x.Id.ToString() == "2A367317-7BF8-45A2-89D5-74B8E8D54D3B");
+
+                var userRole = new UserRole(users.AsQueryable().FirstOrDefault(), UserRole);
+                context.UserRoles.Add(userRole);
             }
          
             if (!context.Books.Any())

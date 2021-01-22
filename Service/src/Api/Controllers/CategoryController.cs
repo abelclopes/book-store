@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 using Domain;
 using Domain.Interface;
-using NSwag.Annotations;
 
 namespace Api.Controllers
 {

@@ -9,7 +9,7 @@ namespace Domain
     public class User: EntidadeBase
     {
         public User(){}
-        public User(string name, string cpf, string email, string username, string password, Role role )
+        public User(string name, string cpf, string email, string username, string password, string role )
         {
             Name = name;
             Cpf = cpf;
@@ -25,6 +25,6 @@ namespace Domain
         public string Email { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
-        public Role Role { get; set; }
+        public string Role { get; set; }
     }
 }

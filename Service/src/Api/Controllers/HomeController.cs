@@ -27,25 +27,7 @@ namespace Api.Controllers
         {
             _logger = logger;
         }
-        [HttpPost]
-        [Route("login")]
-        [AllowAnonymous]
-        public async Task<ActionResult<dynamic>> Authenticate([FromBody] UserPayLoad model)
-        {
-            var users = _context.Users;
-            var user = UserRepository.Get(model.Username, model.Password,users);
-
-            if (user == null)
-                return NotFound(new { message = "Usuário ou senha inválidos" });
-
-            var token = await Task.FromResult(TokenService.GenerateToken(user));
-            user.Password = "";
-            return new
-            {
-                user = user,
-                token = token
-            };
-        }
+        
 
         [HttpGet]
         [Route("anonymous")]

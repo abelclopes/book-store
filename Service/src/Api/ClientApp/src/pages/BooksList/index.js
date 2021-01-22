@@ -5,9 +5,9 @@ import { Link, useHistory, withRouter } from "react-router-dom";
 import api from "../../services/api";
 import { login } from "../../services/auth";
 
-import { Form, Container } from "./styles";
+import { Form, Container, CustomTable, ButtonsContainer } from "./styles";
 
-const SignIn = () => {
+const Books = () => {
     const history = useHistory();
 
     const [username, setUsername] = useState('');
@@ -15,7 +15,7 @@ const SignIn = () => {
     const [error, setError] = useState('');
 
 
-  const handleSignIn = async e => {
+  const handleBooks = async e => {
     e.preventDefault();
     if (!username || !password) {
         setError({ error: "Preencha e-mail e senha para continuar!" });
@@ -36,25 +36,17 @@ const SignIn = () => {
 
     return (
       <Container>
-        <Form onSubmit={handleSignIn}>
-          {/* <img src={Logo} alt="Airbnb logo" /> */}
-          {error && <p>{error}</p>}
-          <input
-            type="email"
-            placeholder="Endereço de e-mail"
-            onChange={e => setUsername(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="Senha"
-            onChange={e => setPassword(e.target.value)}
-          />
-          <button type="submit">Entrar</button>
-          <hr />
-          <Link to="/signup">Criar conta grátis</Link>
-        </Form>
+        <ButtonsContainer></ButtonsContainer>
+        <table>
+          <tr>
+            <th>Header Row 1</th>
+            <th>Header Row 2</th>
+            <th>Header Row 3</th>
+          </tr>
+         
+        </table>
       </Container>
     );
 }
 
-export default withRouter(SignIn);
+export default withRouter(Books);
