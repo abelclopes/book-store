@@ -85,8 +85,9 @@ namespace Infraestructure.Data
                 };
                 context.Categories.AddRange(Categories);
             }
-         
-        
+
+            List<Role> lists = new List<Role>();
+            var myRoles = lists;
             if (!context.Roles.Any())
             {
                 var Roles = new Role[]
@@ -98,7 +99,7 @@ namespace Infraestructure.Data
                    new Role { Id = Guid.NewGuid(), Name = "Vendedor", Nivel = 5},
                 };
                 context.Roles.AddRange(Roles);
-                
+                myRoles = Roles.ToList();
             }
             if (!context.Users.Any())
             {
@@ -115,8 +116,8 @@ namespace Infraestructure.Data
                     },
                 };
                 
-                context.UserRoles.Add(new UserRole(context.Users.FirstOrDefault(), context.Roles.FirstOrDefault()));
                 context.Users.AddRange(users);
+                context.UserRoles.Add(new UserRole(users.AsQueryable().FirstOrDefault(), myRoles.AsQueryable().FirstOrDefault()));
             }
          
             if (!context.Books.Any())

@@ -1,21 +1,12 @@
-using System;
+
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Identity.Core;
 using Microsoft.AspNetCore.Authorization;
-
-using Swashbuckle.AspNetCore.SwaggerGen;
-using Api.Repository;
-using Api.Services;
-
 using Domain;
-using Domain.Helpers;
 using Domain.Interface;
-
-using Api.Model;
+using NSwag.Annotations;
 
 namespace Api.Controllers
 {
@@ -24,6 +15,7 @@ namespace Api.Controllers
     {
 
         private readonly ILogger<CategoryController> _logger;
+
         public CategoryController(IContext context, ILogger<CategoryController> logger)
         : base(context)
         {
@@ -32,16 +24,19 @@ namespace Api.Controllers
 
         [HttpGet]
         [Authorize]
-        [SwaggerResponse(typeof(List<Category>),201)]
-        [SwaggerResponse(401)]
-        [SwaggerResponse(403)]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
 
-        public ActionResult<List<Category>> get()
+        public ActionResult<List<Category>> Get()
         {
-            return  _context.Categories.Where(x => !x.Excluded).ToList();
 
+            var categories = _context.Categories.Where(x => !x.Excluded).ToList();
+            var notFound = new NotFoundResult();
+
+            return categories.Any() ? (ActionResult<List<Category>>)Ok(categories) : notFound;
         }
-        
+
 
 
     }

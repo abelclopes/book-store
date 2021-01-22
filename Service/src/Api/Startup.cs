@@ -82,24 +82,11 @@ namespace Api
             });
            
             ResolveDependencies(services);
-            // Register the Swagger services
-            // services.AddSwaggerDocument();
-            // Register the Swagger generator, defining one or more Swagger documents
-            
-            services.AddSwaggerDocument(c =>{
-                // Set the comments path for the Swagger JSON and UI.
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
-            });
-            // services.AddSwaggerGen(c =>
-            // {
-            //     c.SwaggerDoc("v1", new { Title = "Gerenciador de Propostas API", Version = "v1" });
-            //     c.AddSecurityDefinition("Bearer", new ApiKeyScheme { In = "header", Description = "Please enter JWT with Bearer into field", Name = "Authorization", Type = "apiKey" });
-            //     c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {
-            //         { "Bearer", Enumerable.Empty<string>() },
-            //     });
-            // });
+
+
+
+            // services.AddSwaggerDocument();            
+            services.AddSwaggerDocument();
             
         }
        private static void ResolveDependencies(IServiceCollection services)
@@ -145,7 +132,7 @@ namespace Api
                     pattern: "{controller}/{action=Index}/{id?}");
             });
 
-             // Register the Swagger generator and the Swagger UI middlewares
+
             app.UseOpenApi();
             app.UseSwaggerUi3();
             
@@ -158,14 +145,12 @@ namespace Api
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
-            
-             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
 
-                context.Seed();
-            }
-            
+            using var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
+            var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+
+            context.Seed();
+
         }
     }
 }
