@@ -13,35 +13,23 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authorization;
-
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
-
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Net.Http.Headers;
 using System.Text.Json;
-using System.Text;
 using System.Reflection;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http.Features;
-
 using NSwag.Generation.Processors.Security;
-
 using Api.authConfigurarion;
-
 using Domain.Interface;
-
 using Infraestructure;
 using Infraestructure.Data;
-
 using Swashbuckle.AspNetCore.SwaggerGen;
-using Microsoft.OpenApi.Models;
-
-
 using Microsoft.AspNetCore.ResponseCompression;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -94,19 +82,11 @@ namespace Api
             });
            
             ResolveDependencies(services);
-            // Register the Swagger services
-            // services.AddSwaggerDocument();
-            // Register the Swagger generator, defining one or more Swagger documents
-            
+
+
+
+            // services.AddSwaggerDocument();            
             services.AddSwaggerDocument();
-            // services.AddSwaggerGen(c =>
-            // {
-            //     c.SwaggerDoc("v1", new { Title = "Gerenciador de Propostas API", Version = "v1" });
-            //     c.AddSecurityDefinition("Bearer", new ApiKeyScheme { In = "header", Description = "Please enter JWT with Bearer into field", Name = "Authorization", Type = "apiKey" });
-            //     c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {
-            //         { "Bearer", Enumerable.Empty<string>() },
-            //     });
-            // });
             
         }
        private static void ResolveDependencies(IServiceCollection services)
@@ -152,7 +132,7 @@ namespace Api
                     pattern: "{controller}/{action=Index}/{id?}");
             });
 
-             // Register the Swagger generator and the Swagger UI middlewares
+
             app.UseOpenApi();
             app.UseSwaggerUi3();
             
@@ -165,14 +145,12 @@ namespace Api
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
-            
-             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
 
-                context.Seed();
-            }
-            
+            using var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
+            var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+
+            context.Seed();
+
         }
     }
 }

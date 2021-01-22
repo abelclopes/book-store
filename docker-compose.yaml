@@ -1,12 +1,32 @@
-version: '3.6'
+version: '3.5'
 
-networks: 
-  dockersql-network:
-    driver: bridge
+networks : 
+  localdev:
+    name: localdev
 
 services:
-  sql.database:
-    container_name: dockersql.database
-    image: microsoft/mssql-server-linux:2017-latest
+ starterpackmssql:
+    image: mssql
+    restart: always
+    build:
+      context: .
+      dockerfile:StarterPackMSSQL/Dockerfile
+    ports:
+      - "5001:80"
+    depends_on:
+      - db-server
     networks:
-      - dockersql-network
+      - localdev
+
+  db-server:
+    image: microsoft/mssql-server-linux
+    container_name: db-server
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=password123
+      - MSSQL_TCP_PORT=1433
+
+    ports:
+      - "1400:1433"
+    networks:
+      - localdev
