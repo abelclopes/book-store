@@ -13,35 +13,23 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authorization;
-
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
-
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Net.Http.Headers;
 using System.Text.Json;
-using System.Text;
 using System.Reflection;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http.Features;
-
 using NSwag.Generation.Processors.Security;
-
 using Api.authConfigurarion;
-
 using Domain.Interface;
-
 using Infraestructure;
 using Infraestructure.Data;
-
 using Swashbuckle.AspNetCore.SwaggerGen;
-using Microsoft.OpenApi.Models;
-
-
 using Microsoft.AspNetCore.ResponseCompression;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -98,7 +86,12 @@ namespace Api
             // services.AddSwaggerDocument();
             // Register the Swagger generator, defining one or more Swagger documents
             
-            services.AddSwaggerDocument();
+            services.AddSwaggerDocument(c =>{
+                // Set the comments path for the Swagger JSON and UI.
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
             // services.AddSwaggerGen(c =>
             // {
             //     c.SwaggerDoc("v1", new { Title = "Gerenciador de Propostas API", Version = "v1" });

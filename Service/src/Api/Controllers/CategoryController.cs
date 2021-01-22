@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Identity.Core;
 using Microsoft.AspNetCore.Authorization;
 
+using Swashbuckle.AspNetCore.SwaggerGen;
 using Api.Repository;
 using Api.Services;
 
@@ -30,28 +31,17 @@ namespace Api.Controllers
         }
 
         [HttpGet]
+        [Authorize]
+        [SwaggerResponse(typeof(List<Category>),201)]
+        [SwaggerResponse(401)]
+        [SwaggerResponse(403)]
+
         public ActionResult<List<Category>> get()
         {
             return  _context.Categories.Where(x => !x.Excluded).ToList();
 
         }
-        // [HttpPost]
-        // [Route("create")]
-        // public async Task<ActionResult<UserToken>> create([FromBody] string model)
-        // {
-        //     // Recupera o usuário
-        //     var user = UserRepository.Add(model.Username, model.Password);
-
-        //     // Verifica se o usuário existe
-        //     if (user == null)
-        //         return NotFound(new { message = "Usuário ou senha inválidos" });
-
-        //     _context.Users.Add(user);
-
-        //     //_context.UsuarioPermissoes.Add(usuarioPermissoes);
-        //     await _context.SaveChangesAsync();
-
-        // }
+        
 
 
     }
