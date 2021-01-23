@@ -41,7 +41,7 @@ namespace Api.Controllers
 
         [HttpPost]
         [Route("Register")]
-        public async Task<ActionResult<UserToken>> Register([FromBody]UserPayLoad model)
+        public async Task<ActionResult<UserToken>> Register([FromBody]UserRegisterPayLoad model)
         {
             // Recupera o usuário
             var user = UserRepository.Add(model.Username, model.Password, model.RoleId, _context.Roles.ToList());

@@ -128,14 +128,18 @@ namespace Infraestructure.Data
             if (!context.Books.Any())
             {
 
-                // var books = new Book[]
-                // {
-                //     // senha é teste123
-                //     new Book { Id = Guid.NewGuid(),
-                //             Name = "Abel Lopes",
-
-                //     },
-                // };
+                var books = new Book[]
+                {
+                    1 — Dom Quixote, Miguel de Cervantes, 1605. ...
+                    2 — Guerra e Paz, Liev Tolstói, 1869. ...
+                    3 — A Montanha Mágica, Thomas Mann, 1924. ...
+                    4 — Cem Anos de Solidão, Gabriel García Márquez, 1967. ...
+                    5 — Ulisses, James Joyce, 1922. ...
+                    6 — Em Busca do Tempo Perdido, Marcel Proust, 1913. ...
+                    7 — A Divina Comédia, Dante Alighieri, 1321
+                    // senha é teste123
+                    new Book { Id = Guid.NewGuid(), Title = "Dom Quixote, Miguel de Cervantes",},
+                };
                 // context.Users.AddRange(users);
             }
             //     foreach (Permissao p in permissoes)

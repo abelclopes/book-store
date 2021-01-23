@@ -15,9 +15,9 @@ namespace Api.migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .UseIdentityColumns()
+                .HasAnnotation("ProductVersion", "3.1.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.2");
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Domain.Book", b =>
                 {
@@ -40,6 +40,9 @@ namespace Api.migrations
                     b.Property<string>("Nome")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("categorieId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.ToTable("Books");
@@ -49,9 +52,6 @@ namespace Api.migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BookId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateCriation")
@@ -70,8 +70,6 @@ namespace Api.migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BookId");
 
                     b.ToTable("Categories");
                 });
@@ -165,14 +163,10 @@ namespace Api.migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("UserRoles");
-                });
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
-            modelBuilder.Entity("Domain.Category", b =>
-                {
-                    b.HasOne("Domain.Book", null)
-                        .WithMany("categories")
-                        .HasForeignKey("BookId");
+                    b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("Domain.UserRole", b =>
@@ -182,16 +176,12 @@ namespace Api.migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("Domain.Book", b =>
-                {
-                    b.Navigation("categories");
-                });
-
-            modelBuilder.Entity("Domain.Role", b =>
-                {
-                    b.Navigation("UserRoles");
+                    b.HasOne("Domain.User", null)
+                        .WithOne("UserRole")
+                        .HasForeignKey("Domain.UserRole", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

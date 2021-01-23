@@ -9,13 +9,14 @@ namespace Domain
     public class User: EntidadeBase
     {
         public User(){}
-        public User(string name, string cpf, string email, string username, string password, string role )
+        public User(string name, string cpf, string email, string username, string password, string role, UserRole userRole )
         {
             Name = name;
             Cpf = cpf;
             Email = email;
             Username = username;
             Role= role;
+            UserRole = userRole;
             Password = Util.GetSHA1HashData(password);
         }
         
@@ -26,5 +27,6 @@ namespace Domain
         public string Username { get; set; }
         public string Password { get; set; }
         public string Role { get; set; }
+        public UserRole UserRole { get; set; }
     }
 }

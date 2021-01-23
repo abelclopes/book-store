@@ -17,7 +17,7 @@ namespace Api.Repository
         //     return users.FirstOrDefault(x => x.User.Username.ToLower() == username.ToLower() || x.User.Email.ToLower() == username.ToLower() && x.User.Password == password);
         // }
 
-        public static User Add(string username, string password, Guid RoleId, List<Role> roles)
+        public static User Add(string username, string password, Nullable<System.Guid> RoleId, List<Role> roles)
         {
             var setRole = roles.FirstOrDefault(x=> x.Id == RoleId);
             return new User { Id = Guid.NewGuid(), Username = username.ToLower(), Password = password, Role = setRole.Name };
@@ -31,8 +31,11 @@ namespace Api.Repository
                 if (_users.Any())
                 {
                     getUser = _users.FirstOrDefault(x => x.Username.ToLower() == username.ToLower() || x.Email.ToLower() == username.ToLower() && x.Password == password);
-                    var RoleId = UserRoles.FirstOrDefault(x => x.UserId == getUser.Id).RoleId;
-                    getUser.Role = roles.FirstOrDefault(x => x.Id == RoleId).Name;
+                    if (getUser != null)
+                    {
+                        var RoleId = UserRoles.FirstOrDefault(x => x.UserId == getUser.Id).RoleId;
+                        getUser.Role = roles.FirstOrDefault(x => x.Id == RoleId).Name;
+                    }
                 }
                 return getUser;
             }
