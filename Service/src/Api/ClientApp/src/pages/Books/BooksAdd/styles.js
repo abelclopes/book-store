@@ -1,16 +1,45 @@
 import styled from "styled-components";
+import { BaseModalBackground } from "styled-react-modal";
+import { Form } from "../../SignIn/styles";
+
 
 export const Container = styled.div`
   display: flex;
   justify-content: center;
+  flex-direction: column;
 `;
 export const ButtonsContainer = styled.div`
   display: flex;
   justify-content: center;
 `;
-export const Form = styled.form`
-  width: 400px;
-  background: #fff;
+export const FadingBackground = styled(BaseModalBackground)`
+  opacity: ${props => props.opacity};
+  transition: opacity ease 200ms;
+`;
+export const ContainerButton = styled(Container)`
+  display: unset;
+  width: 100%;
+  margin: 20px auto;
+  display: flex;
+  flex-wrap: wrap;
+`;
+export const ContainerTable = styled(Container)`
+  display: unset;
+  max-width: 1010px;
+  width: 100%;
+  margin: 20px auto;
+`;
+export const Row = styled.div`
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: row;
+  flex-wrap: wrap;
+`;
+export const FormSearch = styled(Form)`
+  width: 100%;
+  max-width: 500px;
+  background: transparent;
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -32,6 +61,23 @@ export const Form = styled.form`
     height: 46px;
     margin-bottom: 15px;
     padding: 1em 20px;
+    color: #777;
+    font-size: 15px;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    &::placeholder {
+      color: #999;
+    }
+  }
+  label: {
+    text-align: left;
+  }
+  textarea {
+    flex: 1;
+    height: 92px;
+    margin-bottom: 15px;
+    padding: 1em 15px;
     color: #777;
     font-size: 15px;
     width: 100%;
