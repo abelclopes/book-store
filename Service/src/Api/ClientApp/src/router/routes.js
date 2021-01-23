@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Switch, Redirect, useHistory } from "react-router-dom";
-import SignIn from "../pages/SignIn";
-import SignUp from "../pages/SignUp";
+import SignIn from "../pages/Auth/SignIn";
+import SignUp from "../pages/Auth/SignUp";
 import BooksList from "../pages/Books/BooksList";
 import BooksAdd from "../pages/Books/BooksAdd";
 

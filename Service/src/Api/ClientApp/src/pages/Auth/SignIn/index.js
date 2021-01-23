@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Link, useHistory, withRouter } from "react-router-dom";
 
 // import Logo from "../../assets/airbnb-logo.svg";
-import api from "../../services/api";
-import { login } from "../../services/auth";
+import api from "../../../services/api";
+import { login } from "../../../services/auth";
 
 import { Form, Container } from "./styles";
 

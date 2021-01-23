@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { BaseModalBackground } from "styled-react-modal";
-import { Form } from "../../SignIn/styles";
+import { Form } from "../../Auth/SignIn/styles";
 
 
 export const Container = styled.div`

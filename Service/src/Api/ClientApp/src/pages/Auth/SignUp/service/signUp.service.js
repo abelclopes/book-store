@@ -1,5 +1,5 @@
 
-import axios from "../../../services/api";
+import axios from "../../../../services/api";
 
 class SignUpService {
         static async registerUser(user) {

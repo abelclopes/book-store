@@ -16,6 +16,7 @@ namespace Infraestructure.Data
 
             // // Look for any students.
            
+            var categoriesList = new List<Category>();
             if (!context.Categories.Any())
             {
                 var Categories = new Category[]
@@ -83,6 +84,7 @@ namespace Infraestructure.Data
                     new Category{Id = Guid.NewGuid(), Name="Poesia", Description="Poesia" },
                     new Category{Id = Guid.NewGuid(), Name="outros-assuntos", Description="Outros Assuntos" }
                 };
+                categoriesList = Categories.ToList();
                 context.Categories.AddRange(Categories);
             }
 
@@ -125,22 +127,23 @@ namespace Infraestructure.Data
                 context.UserRoles.Add(userRole);
             }
          
-            if (!context.Books.Any())
+            if (!context.Books.Any() && context.Categories.Any() || categoriesList.Any())
             {
+
+                var categoryId = context.Categories.Any() ? context.Categories.FirstOrDefault().Id : categoriesList.FirstOrDefault().Id;
 
                 var books = new Book[]
                 {
-                    1 — Dom Quixote, Miguel de Cervantes, 1605. ...
-                    2 — Guerra e Paz, Liev Tolstói, 1869. ...
-                    3 — A Montanha Mágica, Thomas Mann, 1924. ...
-                    4 — Cem Anos de Solidão, Gabriel García Márquez, 1967. ...
-                    5 — Ulisses, James Joyce, 1922. ...
-                    6 — Em Busca do Tempo Perdido, Marcel Proust, 1913. ...
-                    7 — A Divina Comédia, Dante Alighieri, 1321
-                    // senha é teste123
-                    new Book { Id = Guid.NewGuid(), Title = "Dom Quixote, Miguel de Cervantes",},
+                    new Book { Id = Guid.NewGuid(), Title = "Dom Quixote", Author = "Miguel de Cervantes", Year = "1605", CategoryId = categoryId },
+                    new Book { Id = Guid.NewGuid(), Title = "Guerra e Paz", Author = "Liev Tolstói", Year = "1869", CategoryId = categoryId },
+                    new Book { Id = Guid.NewGuid(), Title = "A Montanha Mágica", Author = "Thomas Mann", Year = "1924", CategoryId = categoryId },
+                    new Book { Id = Guid.NewGuid(), Title = "Cem Anos de Solidão", Author = "Gabriel García Márquez", Year = "1967", CategoryId = categoryId },
+                    new Book { Id = Guid.NewGuid(), Title = "Ulisses", Author = "James Joyce", Year = "1922", CategoryId = categoryId },
+                    new Book { Id = Guid.NewGuid(), Title = "Em Busca do Tempo Perdido", Author = "Marcel Proust", Year = "1913", CategoryId = categoryId },
+                    new Book { Id = Guid.NewGuid(), Title = "A Divina Comédia", Author = "Dante Alighieri", Year = "1321", CategoryId = categoryId },                    
+                    new Book { Id = Guid.NewGuid(), Title = "Dom Quixote",Author = "Miguel de Cervantes", Year = "", CategoryId = categoryId }
                 };
-                // context.Users.AddRange(users);
+                context.Books.AddRange(books);
             }
             //     foreach (Permissao p in permissoes)
             //     {
