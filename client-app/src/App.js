@@ -25,6 +25,7 @@ table {
   width: 100%;
   border: 1px solid black;
   border-collapse: collapse;
+  background: #ffffff;
   th,
   td {
     border: 1px solid black;
@@ -34,8 +35,7 @@ table {
   td,
   tr {
     padding: 5px;
-    background: #ffffff;
-  }
+  },
   th {
     text-align: left;
   }

@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import BookService from "../service/books.service";
+import iconedit from '../../../../assets/svg/edit.svg';
+import icondelete from '../../../../assets/svg/delete.svg';
 
 import {
   Container,
   FormSearch,
   ContainerTable,
   ContainerButton,
+  CustomTable,
 } from "./styles";
+import styled from "styled-components";
+import ButtonStyled from "../../../components/button";
 
 const BooksList = ({ props }) => {
   const [listBooks, setListBooks] = useState('');
@@ -15,7 +20,7 @@ const BooksList = ({ props }) => {
   const [searchValue, setSearchValue] = useState("");
 
   const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize, setPageSize] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   console.log(props);
   const history = useHistory();
@@ -54,6 +59,11 @@ const BooksList = ({ props }) => {
             <th>{book.title}</th>
             <th>{book.year}</th>
             <th>{book.author}</th>
+            <th>{book.publishingCompany}</th>
+            <th> 
+              <ButtonTable style={{width: 1.5 + "em", border: 'unset'}}><img src={iconedit} title="editar" /></ButtonTable>
+              <ButtonTable style={{width: 1.5 + "em", border: 'unset'}}><img src={icondelete} title="excluir" /></ButtonTable>
+            </th>
           </tr>
         );
       });
@@ -101,19 +111,32 @@ const BooksList = ({ props }) => {
       </ContainerButton>
 
       <ContainerTable>
-        <table className="table table-bordered ">
-          <thead className="thead-dark">
-            <tr>
-              <th>Titulo</th>
-              <th>Ano</th>
-              <th>Autor</th>
-            </tr>
-          </thead>
-          <tbody>{RenderListBooks()}</tbody>
-        </table>
+        
+          <table className="table table-striped table-hover">
+            <thead className="thead-dark ">
+              <tr>
+                <th>Titulo</th>
+                <th>Ano</th>
+                <th>Autor</th>
+                <th>Editora</th>
+                <th style={{width:150 + "px"}}>Ações</th>
+              </tr>
+            </thead>
+            <tbody>{RenderListBooks()}</tbody>
+          </table>
+        
       </ContainerTable>
     </Container>
   );
 };
+
+const ButtonTable = styled(ButtonStyled)`
+  box-sizing: border-box;
+  display: flex;
+  height:0px;
+  padding:0px ;
+  margin: 0 25px;
+  display: unset;
+`;
 
 export default BooksList;

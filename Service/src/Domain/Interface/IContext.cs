@@ -14,6 +14,7 @@ namespace Domain.Interface
         DbSet<UserRole> UserRoles { get; set; }
         DbSet<Category> Categories { get; set; }
         DbSet<Book> Books { get; set; }
+        DbSet<RentBook> RentBooks { get; set; }
 
        
         DatabaseFacade Database { get; }

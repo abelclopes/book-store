@@ -89,25 +89,3 @@ export const FormSearch = styled(Form)`
     text-decoration: none;
   }
 `;
-
-export const CustomTable = styled.table`
-  &&& {
-    table,
-    th,
-    td {
-      border: 1px solid black;
-      border-collapse: collapse;
-    }
-    th,
-    td,
-    tr {
-      padding: 5px;
-    }
-    th {
-      text-align: left;
-    }
-    table {
-      width: 100%;
-    }
-  }
-`;

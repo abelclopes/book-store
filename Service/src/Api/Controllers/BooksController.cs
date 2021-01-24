@@ -34,7 +34,7 @@ namespace Api.Controllers
         public async Task<ActionResult<BooksResponseModel>> Get([FromQuery] PaginationParams model)
         {
             var response = new BooksResponseModel();
-                var books = await Task.FromResult( _context.Books.Where(x => !x.Excluded).ToList());
+                var books = await Task.FromResult( _context.Books.Where(x => !x.Excluded).OrderBy(x=>x.Title).ToList());
             if(!string.IsNullOrEmpty(model.searchTerm))
             {
                 books = books.Where(x=> 
