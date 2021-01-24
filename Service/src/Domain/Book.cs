@@ -52,6 +52,19 @@ namespace Domain
         {
             Title = title;
         }
+
+        public void UpdateByBook(Book model)
+        {
+            Id = model.Id;
+            Title = model.Title;
+            Description = model.Description;
+            Author = model.Author;
+            Year = model.Year;
+            CategoryId = model.CategoryId;
+            PublishingCompany = model.PublishingCompany;
+            Excluded = model.Excluded;
+            // return this;
+        }
         public void Deleted()
         {
             this.Delete();

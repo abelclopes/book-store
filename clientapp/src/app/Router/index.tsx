@@ -1,17 +1,24 @@
 import React from "react";
 import {
-  BrowserRouter as Router,
+  BrowserRouter,
   Switch,
   Route,
-  Link
+  Redirect,
+  useHistory,
+  Link,
 } from "react-router-dom";
+import { isAuthenticated } from "../services/auth";
+import BooksList from "../pages/book/BooksList";
+import SignIn from "../pages/auth/SignIn";
+import SignUp from "../pages/auth/SignUp";
 
 import { Container } from "./styles";
+import BooksAdd from "../pages/book/BooksAdd";
 
 const PrivateRoute: React.FC = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
-    render={props =>
+    render={(props) =>
       isAuthenticated() ? (
         <Component {...props} />
       ) : (
@@ -20,10 +27,10 @@ const PrivateRoute: React.FC = ({ component: Component, ...rest }) => (
     }
   />
 );
-const router: React.FC = () => {
+const Router: React.FC = () => {
   return (
     <Container>
-      <Router>
+      <BrowserRouter>
         <div>
           <ul>
             <li>
@@ -39,20 +46,16 @@ const router: React.FC = () => {
 
           <hr />
           <Switch>
-            <Route exact path="/">
-              <Home />
-            </Route>
-            <Route path="/about">
-              <About />
-            </Route>
-            <Route path="/dashboard">
-              <Dashboard />
-            </Route>
+            <Route path="/signup" component={SignUp} />
+            <PrivateRoute path="/books" component={BooksList} />
+            <PrivateRoute path="/book-add" component={BooksAdd} />
+            <Route exact path="/" component={SignIn} />
+            <Route path="*" component={() => <h1>Page not found</h1>} />
           </Switch>
         </div>
-      </Router>
+      </BrowserRouter>
     </Container>
   );
 };
 
-export default router;
+export default Router;

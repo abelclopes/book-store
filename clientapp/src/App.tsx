@@ -1,26 +1,53 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.css';
 
+
+import { createGlobalStyle } from 'styled-components'
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Router from './app/Router';
+import Layout from './app/components/Layout';
+
+const GlobalStyle = createGlobalStyle`
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  outline: 0;
+}
+body, html {
+  background: #eee;
+  font-family: 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
+  text-rendering: optimizeLegibility !important;
+  -webkit-font-smoothing: antialiased !important;
+  height: 100%;
+  width: 100%;
+}
+table {
+  width: 100%;
+  border: 1px solid black;
+  border-collapse: collapse;
+  th,
+  td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+  th,
+  td,
+  tr {
+    padding: 5px;
+  }
+  th {
+    text-align: left;
+  }
+  }
+`;
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+  return (    
+    <Layout>
+      <GlobalStyle />
+      <Router />
+  </Layout>
   );
 }
 

@@ -40,5 +40,23 @@ namespace Api.Controllers
             return Ok(response);
         }
 
+        [HttpPost("Rented/")]
+        [Authorize]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        public async Task<ActionResult<BooksResponseBoolModel>> Get(Boolean Rented, [FromBody] RentBookModel model)
+        {
+            var response = new BooksResponseBoolModel();
+            // var books = await Task.FromResult( _context.Books.Where(x => !x.Excluded && !x.Rented).ToList());
+            // var response = ShowMensageResponse.BuildResponse(books, model);
+            // if(!response.Success) {
+            //     var notFound = new NotFoundResult();
+            //     return notFound;
+            // }
+
+            return Ok(response);
+        }
+
     }
 }

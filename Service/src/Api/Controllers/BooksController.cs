@@ -31,15 +31,26 @@ namespace Api.Controllers
         [ProducesResponseType(201)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
-        public async Task<ActionResult<BooksResponseModel>> Get([FromQuery]PaginationParams model)
+        public async Task<ActionResult<BooksResponseModel>> Get([FromQuery] PaginationParams model)
         {
+            var response = new BooksResponseModel();
+                var books = await Task.FromResult( _context.Books.Where(x => !x.Excluded).ToList());
+            if(!string.IsNullOrEmpty(model.searchTerm))
+            {
+                books = books.Where(x=> 
+                                    x.Title.ToLower().Contains(model.searchTerm.ToLower()) ||
+                                    x.Description.ToLower().Contains(model.searchTerm) ||
+                                    x.Year.Contains(model.searchTerm)                                    
+                                    ).ToList();
+            }   
+            if(books.Any())
+            {
+                response = ShowMensageResponse.BuildResponse(books, model);
+            }else{
+                response.Success = false;
 
-            var books = await Task.FromResult( _context.Books.Where(x => !x.Excluded).ToList());
-            var response = ShowMensageResponse.BuildResponse(books, model);
-            if(!response.Success) {
-                var notFound = new NotFoundResult();
-                return notFound;
             }
+
 
             return Ok(response);
         }
@@ -112,7 +123,7 @@ namespace Api.Controllers
         [ProducesResponseType(201)]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
-        public async Task<ActionResult<BooksResponsePostModel>> Put([FromRoute] string id,[FromBody]BookModel model)
+        public async Task<ActionResult<BooksResponsePostModel>> Put([FromRoute] string id,[FromBody]BookPutModel model)
         {
             var response = new BooksResponsePostModel();
 
