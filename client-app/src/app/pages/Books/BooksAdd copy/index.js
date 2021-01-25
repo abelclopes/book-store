@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {  useHistory,  useParams } from "react-router-dom";
+import {   useParams } from "react-router-dom";
 import styled from "styled-components";
 import BookService from "../service/books.service";
 import bookDefaul from '../../../../assets/svg/book.svg';
@@ -18,8 +18,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ButtonStyled from "../../../components/button";
 
-const BooksDetails = ({props}) => {
-  const history = useHistory();
+const BooksDetails = ({...props}) => {
   const {id} = useParams();
 
   const [bookDetail, setBookDetail] = useState({});
@@ -33,7 +32,7 @@ const BooksDetails = ({props}) => {
     }
     getCategories()
     
-  }, [])
+  }, [id])
 
   return (
     <Container>
@@ -56,11 +55,6 @@ const BooksDetails = ({props}) => {
     </Container>
   );
 }
-const ImageBook = styled.div`
-  background-image: url(${bookDefaul});
-  
-`;
-
 const ButtonTable = styled(ButtonStyled)`
   box-sizing: border-box;
   display: flex;
