@@ -41,19 +41,20 @@ namespace Api.Controllers
 
         [HttpPost]
         [Route("Register")]
-        public async Task<ActionResult<UserToken>> Register([FromBody]UserPayLoad model)
+        public async Task<ActionResult<UserToken>> Register([FromBody]UserRegisterPayLoad model)
         {
             // Recupera o usuário
-            var user = UserRepository.Add(model.Username, model.Password);
+            var user = UserRepository.Add(model.Username, model.Password, model.RoleId, _context.Roles.ToList());
 
             // Verifica se o usuário existe
             if (user == null)                
                 return NotFound(new { message = "Usuário ou senha inválidos" });
-
+            
+            
             _context.Users.Add(user);
-      
+
             //_context.UsuarioPermissoes.Add(usuarioPermissoes);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();           
             
             // Gera o Token
             var token = await Task.FromResult(TokenService.GenerateToken(user));

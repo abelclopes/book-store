@@ -12,15 +12,9 @@ namespace Domain
         public UserRole(User User, Role role )
         {
             UserId = User.Id;
-            RoleId = role.Id;
-            User = User;
-            role = role;
-            
+            RoleId = role.Id;            
         }
         public Guid UserId { get; set; }
         public Guid RoleId { get; set; }
-
-        public Role Roles { get; set; }
-        public User User { get; set; }
     }
 }

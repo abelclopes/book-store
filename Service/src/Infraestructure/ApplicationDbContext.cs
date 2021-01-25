@@ -23,6 +23,7 @@ namespace Infraestructure
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Book> Books { get; set; }
+        public DbSet<RentBook> RentBooks { get; set; }
 
 
         public async Task<int> SaveChangesAsync()

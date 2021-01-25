@@ -1,9 +1,4 @@
-using System;
-using System.IO;
 using System.Text;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,38 +7,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Authorization;
-
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
-
-using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.Net.Http.Headers;
-using System.Text.Json;
-using System.Text;
-using System.Reflection;
-using Newtonsoft.Json;
-using Microsoft.AspNetCore.Http.Features;
-
-using NSwag.Generation.Processors.Security;
-
-using Api.authConfigurarion;
-
 using Domain.Interface;
-
 using Infraestructure;
 using Infraestructure.Data;
-
-using Swashbuckle.AspNetCore.SwaggerGen;
-using Microsoft.OpenApi.Models;
-
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.ResponseCompression;
-using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.OpenApi.Models;
+using System;
+using Microsoft.Net.Http.Headers;
 
 namespace Api
 {
@@ -60,13 +32,59 @@ namespace Api
         public void ConfigureServices(IServiceCollection services)
         {
 
-           services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection"),
-                    x => x.MigrationsAssembly("Api")));
+            services.AddDbContext<ApplicationDbContext>(options =>
+                 options.UseSqlServer(
+                     Configuration.GetConnectionString("DefaultConnection"),
+                     x => x.MigrationsAssembly("Api")));
             services.AddControllersWithViews();
 
-             // Configure JWT authentication.
+
+
+            // In production, the React files will be served from this directory
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/build";
+            });
+
+            ResolveDependencies(services);
+
+            // Add CORS policy
+            services.AddCors(c =>
+            {
+                c.AddPolicy("AllowOrigin",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .WithHeaders(HeaderNames.ContentType, "x-custom-header")
+                        .WithMethods("PUT", "DELETE", "GET", "OPTIONS")
+                            .WithMethods("PUT", "DELETE", "GET", "OPTIONS");
+                    });                              
+            });
+            // Register the Swagger generator, defining 1 or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "ToDo API",
+                    Description = "A simple example ASP.NET Core Web API",
+                    TermsOfService = new Uri("https://example.com/terms"),
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Shayne Boyer",
+                        Email = string.Empty,
+                        Url = new Uri("https://twitter.com/spboyer"),
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "Use under LICX",
+                        Url = new Uri("https://example.com/license"),
+                    }
+                });
+            });
+            // Configure JWT authentication.
             var key = Encoding.ASCII.GetBytes(Settings.Secret);
 
             services.AddAuthentication(x =>
@@ -86,37 +104,26 @@ namespace Api
                     ValidateAudience = false
                 };
             });
-
-            // In production, the React files will be served from this directory
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "ClientApp/build";
-            });
            
-            ResolveDependencies(services);
-            // Register the Swagger services
-            // services.AddSwaggerDocument();
-            // Register the Swagger generator, defining one or more Swagger documents
-            
-            services.AddSwaggerDocument();
-            // services.AddSwaggerGen(c =>
-            // {
-            //     c.SwaggerDoc("v1", new { Title = "Gerenciador de Propostas API", Version = "v1" });
-            //     c.AddSecurityDefinition("Bearer", new ApiKeyScheme { In = "header", Description = "Please enter JWT with Bearer into field", Name = "Authorization", Type = "apiKey" });
-            //     c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {
-            //         { "Bearer", Enumerable.Empty<string>() },
-            //     });
-            // });
-            
+            services.Configure<GzipCompressionProviderOptions>(options => options.Level = System.IO.Compression.CompressionLevel.Optimal);
+           
+            services.AddResponseCompression(options =>
+            {
+                options.MimeTypes = new[]
+                {
+                    "application/json"
+                };
+            });
+
         }
-       private static void ResolveDependencies(IServiceCollection services)
+        private static void ResolveDependencies(IServiceCollection services)
         {
             services.AddScoped<IContext, ApplicationDbContext>();
             services.AddScoped<IActivityLog, FileSystemActivityLog>();
             services.AddScoped<IErrorLog, FileSystemErrorLog>();
 
         }
-        
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -132,16 +139,16 @@ namespace Api
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseSpaStaticFiles();
+            if (!env.IsDevelopment())
+            {
+                app.UseSpaStaticFiles();
+            }
+
+            app.UseCors("AllowOrigin");
 
             app.UseRouting();
 
-            app.UseCors(x => x
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader());
 
-            
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -152,27 +159,33 @@ namespace Api
                     pattern: "{controller}/{action=Index}/{id?}");
             });
 
-             // Register the Swagger generator and the Swagger UI middlewares
-            app.UseOpenApi();
-            app.UseSwaggerUi3();
-            
-            app.UseSpa(spa =>
+             // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger(c =>
             {
-                spa.Options.SourcePath = "ClientApp";
-
-                if (env.IsDevelopment())
-                {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
-                }
+                c.SerializeAsV2 = true;
             });
-            
-             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
             {
-                var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
 
-                context.Seed();
-            }
-            
+            // app.UseSpa(spa =>
+            // {
+            //     spa.Options.SourcePath = "ClientApp";
+
+            //     if (env.IsDevelopment())
+            //     {
+            //         spa.UseReactDevelopmentServer(npmScript: "start");
+            //     }
+            // });
+
+            using var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
+            var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+
+            context.Seed();
+
         }
     }
 }

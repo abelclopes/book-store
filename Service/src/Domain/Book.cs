@@ -11,23 +11,69 @@ namespace Domain
         public Book()
         {
         }
-        public Book(string nome, string descricao)
+        public Book(string title, string description, string author, string year, Guid categoryId, string publishingCompany)
         {
-            Nome = nome;
-            Descricao = descricao;
+            Title = title;
+            Description = description;
+            Author = author;
+            Year = year;
+            CategoryId = categoryId;
+            PublishingCompany = publishingCompany;
+        }
+        public Book(Guid id, string title, string description, string author, string year, Guid categoryId, string publishingCompany)
+        {
+            Id = id;
+            Title = title;
+            Description = description;
+            Author = author;
+            Year = year;
+            CategoryId = categoryId;
+            PublishingCompany = publishingCompany;
         }
 
-        public string Nome { get; set; }
-        public string Descricao { get; set; }
-        public List<Category> categories { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string Author { get; set; }
+        public string Year { get; set; }
+        public Guid CategoryId { get; set; }
+        public string PublishingCompany { get; set; }
+        public Boolean Rented { get; set; }
+        public bit[] image { get; set; }
+        
         public void update(Book model)
         {
-            Nome = model.Nome;
-            Descricao = model.Descricao;
+            Title = model.Title;
+            Description = model.Description;
+            Author = model.Author;
+            Year = model.Year;
+            CategoryId = model.CategoryId;
+            PublishingCompany = model.PublishingCompany;
         }
-        public void update(string nome)
+        public void update(string title)
         {
-            Nome = nome;
+            Title = title;
+        }
+
+        public void UpdateByBook(Book model)
+        {
+            Id = model.Id;
+            Title = model.Title;
+            Description = model.Description;
+            Author = model.Author;
+            Year = model.Year;
+            CategoryId = model.CategoryId;
+            PublishingCompany = model.PublishingCompany;
+            Excluded = model.Excluded;
+            // return this;
+        }
+        public void Deleted()
+        {
+            this.Delete();
+        }
+        public Book Rent()
+        {
+            Rented = true;
+            return this;
         }
     }
 }

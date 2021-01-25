@@ -16,6 +16,7 @@ namespace Infraestructure.Data
 
             // // Look for any students.
            
+            var categoriesList = new List<Category>();
             if (!context.Categories.Any())
             {
                 var Categories = new Category[]
@@ -83,22 +84,24 @@ namespace Infraestructure.Data
                     new Category{Id = Guid.NewGuid(), Name="Poesia", Description="Poesia" },
                     new Category{Id = Guid.NewGuid(), Name="outros-assuntos", Description="Outros Assuntos" }
                 };
+                categoriesList = Categories.ToList();
                 context.Categories.AddRange(Categories);
             }
-         
-        
+
+            List<Role> lists = new List<Role>();
+            var myRoles = lists;
             if (!context.Roles.Any())
             {
                 var Roles = new Role[]
                 {
-                   new Role { Id = Guid.NewGuid(), Name = "Administrador", Nivel = 1},
-                   new Role { Id = Guid.NewGuid(), Name = "Analista De Compras", Nivel = 2},
-                   new Role { Id = Guid.NewGuid(), Name = "Analista Financeiro", Nivel = 3},
-                   new Role { Id = Guid.NewGuid(), Name = "Diretor Financeiro", Nivel = 4},
-                   new Role { Id = Guid.NewGuid(), Name = "Vendedor", Nivel = 5},
+                   new Role { Id = Guid.Parse("2A367317-7BF8-45A2-89D5-74B8E8D54D3B"), Name = "Administrador", Nivel = 1},
+                   new Role { Id = Guid.Parse("D1FEA121-AF1A-4C4F-A823-D22114E8766A"), Name = "Analista De Compras", Nivel = 2},
+                   new Role { Id = Guid.Parse("5B04367F-828A-476C-96DB-AFC64F84809E"), Name = "Analista Financeiro", Nivel = 3},
+                   new Role { Id = Guid.Parse("2BBA1D8C-276B-4631-97D6-5C3E08C01720"), Name = "Diretor Financeiro", Nivel = 4},
+                   new Role { Id = Guid.Parse("348C3E6E-4CBE-4BFD-9872-2FB6C8E79F47"), Name = "Vendedor", Nivel = 5},
                 };
                 context.Roles.AddRange(Roles);
-                
+                myRoles = Roles.ToList();
             }
             if (!context.Users.Any())
             {
@@ -111,26 +114,36 @@ namespace Infraestructure.Data
                             Cpf = "99999999999",
                             Username = "abellopes",
                             Email = "abellopes@gmail.com" ,
-                            Password = "2242461295221015719538209212227614317113501631961762",                            
+                            Password = "2242461295221015719538209212227614317113501631961762",
+                            Role= context.Roles.Any()? context.Roles.FirstOrDefault(x=> x.Id.ToString() == "2A367317-7BF8-45A2-89D5-74B8E8D54D3B").Name : myRoles.FirstOrDefault().Name
                     },
                 };
                 
-                context.UserRoles.Add(new UserRole(context.Users.FirstOrDefault(), context.Roles.FirstOrDefault()));
                 context.Users.AddRange(users);
+
+                var UserRole = myRoles.Any() ? myRoles.FirstOrDefault() : context.Roles.FirstOrDefault(x => x.Id.ToString() == "2A367317-7BF8-45A2-89D5-74B8E8D54D3B");
+
+                var userRole = new UserRole(users.AsQueryable().FirstOrDefault(), UserRole);
+                context.UserRoles.Add(userRole);
             }
          
-            if (!context.Books.Any())
+            if (!context.Books.Any() && context.Categories.Any() || categoriesList.Any())
             {
 
-                // var books = new Book[]
-                // {
-                //     // senha é teste123
-                //     new Book { Id = Guid.NewGuid(),
-                //             Name = "Abel Lopes",
+                var categoryId = context.Categories.Any() ? context.Categories.FirstOrDefault().Id : categoriesList.FirstOrDefault().Id;
 
-                //     },
-                // };
-                // context.Users.AddRange(users);
+                var books = new Book[]
+                {
+                    new Book { Id = Guid.NewGuid(), Title = "Dom Quixote", Author = "Miguel de Cervantes", Year = "1605", Description = "Um dos maiores clássicos da literatura espanhola, Dom Quixote conta a história de um cavaleiro que leu demasiados romances e enlouqueceu. Dom Quixote agora pensa que é um herói, como nos livros que leu, e sai em busca de aventuras com seu leal escudeiro, Sancho Pança. Esse livro cômico inspirou muitas outras sátiras ao longo da História.", CategoryId = categoryId },
+                    new Book { Id = Guid.NewGuid(), Title = "Guerra e Paz", Author = "Liev Tolstói", Year = "1869",Description = "Se prepare mentalmente, porque este livro é gigante! A obra-prima de Tolstói conta a história de 5 famílias aristocráticas na Rússia e como foram afetadas pela invasão de Napoleão. Entre intrigas, romances, batalhas e surpresas, esse livro é um verdadeiro épico da literatura russa.", CategoryId = categoryId },
+                    new Book { Id = Guid.NewGuid(), Title = "A Montanha Mágica", Author = "Thomas Mann", Year = "1924",Description = "A Montanha Mágica é um livro escrito por Thomas Mann em 1924. Um dos romances mais influentes da literatura mundial do século XX, foi importante para a conquista do Prêmio Nobel de Literatura em 1929 por Mann. É um exemplo clássico da literatura que os alemães classificam como Bildungsroman", CategoryId = categoryId },
+                    new Book { Id = Guid.NewGuid(), Title = "Cem Anos de Solidão", Author = "Gabriel García Márquez", Year = "1967",Description = "", CategoryId = categoryId },
+                    new Book { Id = Guid.NewGuid(), Title = "Ulisses", Author = "James Joyce", Year = "1922",Description = "O clássico poema épico de Homero é sem sombra de dúvidas uma literatura fundamental para quem gostaria de ler as obras mais importantes já escritas do mundo. Esta é a continuação da Ilíada, escrita também pelo autor grego. Em Odisseia, Homero relata o regresso de Odisseu, ou Ulisses, para Ítaca após a guerra de Tróia.", CategoryId = categoryId },
+                    new Book { Id = Guid.NewGuid(), Title = "Em Busca do Tempo Perdido", Author = "Marcel Proust", Year = "1913",Description = "Sete livros constituem a saga de Em Busca do Tempo Perdido do escritor francês Marcel Proust. Considerado por muitos como uma das maiores influências literárias do Século XX, os livros foram traduzido no Brasil por autores como Carlos Drummond de Andrade e Manuel Bandeira. Terminar este clássico que em sua edição de bolso possui mais de 3.500 páginas é uma longa jornada, mas com toda certeza, valerá a pena", CategoryId = categoryId },
+                    new Book { Id = Guid.NewGuid(), Title = "A Divina Comédia", Author = "Dante Alighieri",Description = "", Year = "1321", CategoryId = categoryId },                    
+                    new Book { Id = Guid.NewGuid(), Title = "O Banquete - Platão",Author = "Miguel de Cervantes", Year = "2009",Description = "A República de Platão é sem dúvida o livro mais conhecido do filósofo grego. Contudo, o Banquete, também conhecido como Simpósio, é de longe, o mais belo. Nesta conversa, Platão vai discutir as naturezas do amor e da alma. Um clássico da filosofia escrito por volta de 380 A.C e que ecoa até hoje quando falamos de um tema universal: o amor.", CategoryId = categoryId }
+                };
+                context.Books.AddRange(books);
             }
             //     foreach (Permissao p in permissoes)
             //     {

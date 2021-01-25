@@ -35,37 +35,16 @@ namespace Api.Controllers
         [Authorize]
         public UserInfo GetInfo()
         {
+            var claims = this.User.Claims.ToList();  
+            var userName = claims.FirstOrDefault()?.Value;
+            var userId = _context.Users.FirstOrDefault(x=> x.Username == userName)?.Id;
+            //Filter specific claim    
             return new UserInfo()
             {
-                Id = this.User.GetId(),
+                Id = userId.ToString(),
                 Claims = this.User.Claims.ToDictionary(claim => claim.Type, claim => claim.Value)
             };
         }
 
-        [HttpPost]
-        [Route("login")]
-        public async Task<ActionResult<dynamic>> Authenticate([FromBody]User model)
-        {
-            var users = _context.Users;
-            // Recupera o usuário
-            var user = UserRepository.Get(model.Username, model.Password, users);
-
-            // Verifica se o usuário existe
-            if (user == null)
-                return NotFound(new { message = "Usuário ou senha inválidos" });
-
-            // Gera o Token
-            var token = await Task.FromResult(TokenService.GenerateToken(user));
-
-            // Oculta a senha
-            user.Password = "";
-            
-            // Retorna os dados
-            return new 
-            {
-                User = user,
-                Token = token
-            };
-        }
-    }
+     }
 }

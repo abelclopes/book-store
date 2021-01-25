@@ -20,7 +20,7 @@ namespace Domain
             DateCriation = DateTime.UtcNow;
         }
 
-        public void Excluir()
+        public void Delete()
         {
             Excluded = true;
         }

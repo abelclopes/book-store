@@ -5,8 +5,9 @@ import Routes from './router/routes';
 import { createGlobalStyle } from 'styled-components'
 
 import "font-awesome/css/font-awesome.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-createGlobalStyle`
+const GlobalStyle = createGlobalStyle`
 * {
   box-sizing: border-box;
   padding: 0;
@@ -21,10 +22,29 @@ body, html {
   height: 100%;
   width: 100%;
 }
+table {
+  width: 100%;
+  border: 1px solid black;
+  border-collapse: collapse;
+  th,
+  td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+  th,
+  td,
+  tr {
+    padding: 5px;
+  }
+  th {
+    text-align: left;
+  }
+  }
 `;
 const App = ()=> {
     return (
       <Layout>
+        <GlobalStyle />
         <Routes />
       </Layout>
     );

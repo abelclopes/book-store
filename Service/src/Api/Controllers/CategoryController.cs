@@ -1,20 +1,11 @@
-using System;
+
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Identity.Core;
 using Microsoft.AspNetCore.Authorization;
-
-using Api.Repository;
-using Api.Services;
-
 using Domain;
-using Domain.Helpers;
 using Domain.Interface;
-
-using Api.Model;
 
 namespace Api.Controllers
 {
@@ -23,6 +14,7 @@ namespace Api.Controllers
     {
 
         private readonly ILogger<CategoryController> _logger;
+
         public CategoryController(IContext context, ILogger<CategoryController> logger)
         : base(context)
         {
@@ -30,28 +22,20 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Category>> get()
+        [Authorize]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+
+        public ActionResult<List<Category>> Get()
         {
-            return  _context.Categories.Where(x => !x.Excluded).ToList();
 
+            var categories = _context.Categories.Where(x => !x.Excluded).ToList();
+            var notFound = new NotFoundResult();
+
+            return categories.Any() ? (ActionResult<List<Category>>)Ok(categories) : notFound;
         }
-        // [HttpPost]
-        // [Route("create")]
-        // public async Task<ActionResult<UserToken>> create([FromBody] string model)
-        // {
-        //     // Recupera o usuário
-        //     var user = UserRepository.Add(model.Username, model.Password);
 
-        //     // Verifica se o usuário existe
-        //     if (user == null)
-        //         return NotFound(new { message = "Usuário ou senha inválidos" });
-
-        //     _context.Users.Add(user);
-
-        //     //_context.UsuarioPermissoes.Add(usuarioPermissoes);
-        //     await _context.SaveChangesAsync();
-
-        // }
 
 
     }
