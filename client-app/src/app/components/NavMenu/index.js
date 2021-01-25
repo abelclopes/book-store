@@ -1,33 +1,25 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import { logout } from '../../services/auth';
 import './NavMenu.css';
-export default class NavMenu extends Component {
-  static displayName = NavMenu.name;
+const NavMenu = ({...props}) => {
+  
+  const history = useHistory();
+  
+  const [collapsed, setCollapsed] = useState(false);
 
-  constructor (props) {
-    super(props);
-
-    this.toggleNavbar = this.toggleNavbar.bind(this);
-    this.state = {
-      collapsed: true
-    };
+  const toggleNavbar = () => {
+    setCollapsed(!collapsed);
   }
 
-  toggleNavbar () {
-    this.setState({
-      collapsed: !this.state.collapsed
-    });
-  }
-
-  render () {
     return (
       <header>
         <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" light>
           <Container>
-            <NavbarBrand href="/">Api</NavbarBrand>
-            <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
-            <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
+            <NavbarBrand href="/">Book Store</NavbarBrand>
+            <NavbarToggler onClick={()=>toggleNavbar()} className="mr-2" />
+            <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!collapsed} navbar>
               <ul className="navbar-nav flex-grow">
                 <NavItem>
                   <NavLink  className="text-dark"  href="/home">Home</NavLink>
@@ -36,10 +28,10 @@ export default class NavMenu extends Component {
                   <NavLink  className="text-dark" href="/books">Books</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink className="text-dark" href="/counter">Counter</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink className="text-dark" href="/fetch-data">Fetch data</NavLink>
+                  <NavLink className="text-dark" href="#" onClick={()=> {
+                    logout()
+                    window.location = '/';
+                  }}>Logout</NavLink>
                 </NavItem>
               </ul>
             </Collapse>
@@ -47,5 +39,5 @@ export default class NavMenu extends Component {
         </Navbar>
       </header>
     );
-  }
 }
+export default NavMenu;

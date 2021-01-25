@@ -7,6 +7,9 @@ import BooksAdd from "../pages/Books/BooksAdd";
 
 import { isAuthenticated } from "../services/auth";
 import Home from "../pages/Home";
+import BooksDetails from "../pages/Books/BooksDetails";
+import BookReturn from "../pages/Books/BookReturn";
+import BookEdit from "../pages/Books/BookEdit";
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
@@ -15,7 +18,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
       isAuthenticated() ? (
         <Component {...props} />
       ) : (
-        <Redirect to={{ pathname: "/", state: { from: props.location } }} />
+        <Redirect to={{ pathname: "/login", state: { from: props.location } }} />
       )
     }
   />
@@ -23,15 +26,18 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 
 const Routes = () =>{
   const history = useHistory(); 
- 
+
   return(
     <BrowserRouter history={history}>
       <Switch>
-        <Route path="/signup" component={SignUp} />
-        <PrivateRoute path="/books" component={BooksList} />
-        <PrivateRoute path="/book-add" component={BooksAdd} />
-        <PrivateRoute path="/home" component={Home} />
-        <Route exact path="/" component={SignIn} />
+        <PrivateRoute exact path="/books" component={BooksList} />
+        <PrivateRoute exact path="/book-add" component={BooksAdd} />
+        <PrivateRoute exact path="/book-details/:id" component={BooksDetails} />
+        <PrivateRoute exact path="/book-edit/:id" component={BookEdit} />
+        <PrivateRoute exact path="/home" component={Home} />
+        <PrivateRoute exact path="/return-book/:id" component={BookReturn} />
+        <Route exact path="/login" component={SignIn} />
+        <PrivateRoute path="/" component={Home} />
         <Route path="*" component={() => <h1>Page not found</h1>} />
       </Switch>
     </BrowserRouter>

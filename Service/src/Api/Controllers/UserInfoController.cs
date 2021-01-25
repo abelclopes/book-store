@@ -35,9 +35,13 @@ namespace Api.Controllers
         [Authorize]
         public UserInfo GetInfo()
         {
+            var claims = this.User.Claims.ToList();  
+            var userName = claims.FirstOrDefault()?.Value;
+            var userId = _context.Users.FirstOrDefault(x=> x.Username == userName)?.Id;
+            //Filter specific claim    
             return new UserInfo()
             {
-                Id = this.User.GetId(),
+                Id = userId.ToString(),
                 Claims = this.User.Claims.ToDictionary(claim => claim.Type, claim => claim.Value)
             };
         }

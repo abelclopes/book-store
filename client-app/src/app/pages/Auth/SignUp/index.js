@@ -1,6 +1,6 @@
 import React, {  useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import SignUpService from "./service/signUp.service";
+import UserService from "./service/signUp.service";
 
 //import Logo from "../../assets/airbnb-logo.svg";
 
@@ -18,7 +18,7 @@ const SignUp = () => {
     const handleSignUp = (e) => {
         e.preventDefault();
 
-        SignUpService.registerUser({ username: username, password: password, email: email })
+        UserService.registerUser({ username: username, password: password, email: email })
             .then(response => {
                 if (response.token) {
                     history.push(`/home`);

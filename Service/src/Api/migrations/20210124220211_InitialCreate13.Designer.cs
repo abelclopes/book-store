@@ -4,14 +4,16 @@ using Infraestructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Api.migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210124220211_InitialCreate13")]
+    partial class InitialCreate13
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,7 +94,7 @@ namespace Api.migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("BookId")
+                    b.Property<Guid?>("BookId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateCriation")
@@ -120,6 +122,8 @@ namespace Api.migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BookId");
 
                     b.ToTable("RentBooks");
                 });
@@ -217,6 +221,13 @@ namespace Api.migrations
                         .IsUnique();
 
                     b.ToTable("UserRoles");
+                });
+
+            modelBuilder.Entity("Domain.RentBook", b =>
+                {
+                    b.HasOne("Domain.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId");
                 });
 
             modelBuilder.Entity("Domain.UserRole", b =>

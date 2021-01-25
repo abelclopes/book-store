@@ -38,7 +38,8 @@ export const FormSearch = styled(Form)`
   width: 100%;
   background: transparent;
   padding: 0px 0px;
-  display: flex;
+  display: flex;  
+  border: unset !important;
   flex-direction: row;
   align-items: center;
   img {

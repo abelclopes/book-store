@@ -90,7 +90,7 @@ class BookService {
     }
     static async UpdateBook(book) {
         const bookSet = book;
-        const url = `/api/v1/Books/^${book.Id}`;
+        const url = `/api/v1/Books/${book.Id}`;
         return axios
             .request({
                 method: "PUT",
@@ -110,7 +110,7 @@ class BookService {
     }
     static async DeleteBook(book) {
         const bookSet = book;
-        const url = `/api/v1/Books/^${book.Id}`;
+        const url = `/api/v1/Books/${book.Id}`;
         return axios
             .request({
                 method: "DELETE",

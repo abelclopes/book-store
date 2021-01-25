@@ -38,6 +38,7 @@ namespace Domain
         public Guid CategoryId { get; set; }
         public string PublishingCompany { get; set; }
         public Boolean Rented { get; set; }
+        public bit[] image { get; set; }
         
         public void update(Book model)
         {
@@ -69,9 +70,10 @@ namespace Domain
         {
             this.Delete();
         }
-        public void Rent()
+        public Book Rent()
         {
-            this.Rented = true;
+            Rented = true;
+            return this;
         }
     }
 }

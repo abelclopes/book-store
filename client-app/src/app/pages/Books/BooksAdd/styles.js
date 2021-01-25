@@ -61,7 +61,6 @@ export const FormAddBook = styled(Form)`
   background: transparent;
   padding: 20px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   img {
     width: 100px;

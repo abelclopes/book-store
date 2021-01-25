@@ -1,23 +1,43 @@
 import React, { useState, useEffect } from "react";
-import {  useHistory } from "react-router-dom";
+import {  useHistory, useParams } from "react-router-dom";
 import BookService from "../service/books.service";
 import styled from "styled-components";
+import { Container } from "../../../components/DatailsBook/styles";
+import { ContainerFormCenter } from "../BooksAdd/styles";
+import { FormAddBook, FormItem, FormItemTextArea } from "../BooksAdd/styles";
+import UserService from "../../Auth/SignUp/service/signUp.service";
 
-import { Container, FormAddBook,  ContainerFormCenter, FormItemTextArea, FormItem } from "./styles";
 
-const BooksAdd = () => {
+const BookEdit = () => {
   const history = useHistory();
+  const { id } = useParams();
 
-  const [buttonDisabled, setButtonDisabled] = useState(true);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [user, setUser] = useState({ userId: "" });
   const [showMessageSuccess, setShowMessageSuccess] = useState(false);
   const [errorOnSave, setErrorOnSave] = useState(false);
   const [categories, setCategories] = useState('');
   const [book, setBook] = useState({title:'',description:'',year:'',publishingCompany:'',author:'',categoryId:''});
 
-  
+  useEffect(() => {
+    const getBook = () => {
+      BookService.GetBookByIdService(id).then((res) => {
+        setBook(res.result);
+      });
+    };
+    getBook();
+
+    const getUserInfo = () => {
+      UserService.getUserInfo().then((res) => {
+        setUser(res.id);
+      });
+    };
+    getUserInfo();
+  }, [id]);
 
   const saveBook = () =>{
-    BookService.CreatedBook(book)
+    book.id = id;
+    BookService.UpdateBook(book)
     .then(res =>{
       if(res.success){
         setShowMessageSuccess(true)
@@ -75,12 +95,12 @@ const BooksAdd = () => {
 
   return (
     <Container>
-        <h1>Cadastrar Novo Livro</h1>
+        <h1>Alterar livro</h1>
 
         <ContainerFormCenter>
           <FormAddBook onSubmit={e => { e.preventDefault(); }}>
             <MessageSuccessOrError hasSuccess={showMessageSuccess}>
-              Livro Cadastrado Com sucesso!
+              Salvo com sucesso!
             </MessageSuccessOrError>
               <FormItem>
                   <label>Titulo:</label>
@@ -177,4 +197,4 @@ const MessageSuccessOrError = styled.div`
   }; 
 `;
 
-export default BooksAdd;
+export default BookEdit;

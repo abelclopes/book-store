@@ -5,6 +5,11 @@ import { createGlobalStyle } from 'styled-components'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Routes from './app/Routes';
 import Layout from './app/components/Layout';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fab } from '@fortawesome/free-brands-svg-icons'
+import { faCheckSquare, faCoffee } from '@fortawesome/free-solid-svg-icons'
+
+library.add(fab, faCheckSquare, faCoffee)
 
 const GlobalStyle = createGlobalStyle`
 * {
@@ -14,7 +19,7 @@ const GlobalStyle = createGlobalStyle`
   outline: 0;
 }
 body, html {
-  background: #eee;
+  background: #ffffff;
   font-family: 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
   text-rendering: optimizeLegibility !important;
   -webkit-font-smoothing: antialiased !important;

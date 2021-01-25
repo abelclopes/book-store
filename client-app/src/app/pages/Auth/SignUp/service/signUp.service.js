@@ -1,7 +1,7 @@
 
 import axios from "../../../../services/api";
 
-class SignUpService {
+class UserService {
         static async registerUser(user) {
           const userSet = user;
           const url = "/ManagerUser/Register";
@@ -22,8 +22,26 @@ class SignUpService {
               throw error;
             });
         }
-        static async getOnCallVideoService() {
-          const url = "/pharmacy/oncall";
+        static async LoginUser() {
+          const url = "/";
+          return axios
+            .request({
+              method: "GET",
+              url: `${url}`,
+              responseType: "application/json",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+              },
+            })
+            .then((response) => response.data)
+            .catch((error) => {
+              throw error;
+            });
+        }
+        static async getUserInfo() {
+          const url = "/api/v1/UserInfo";
           return axios
             .request({
               method: "GET",
@@ -42,4 +60,4 @@ class SignUpService {
         }
 }
 
-export default SignUpService;
+export default UserService;
