@@ -1,11 +1,15 @@
-import React from "react";
-import { Layout } from './components/Layout';
-import './custom.css'
-import Routes from './router/routes';
+
+import './App.css';
 import { createGlobalStyle } from 'styled-components'
 
-import "font-awesome/css/font-awesome.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Routes from './app/Routes';
+import Layout from './app/components/Layout';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fab } from '@fortawesome/free-brands-svg-icons'
+import { faCheckSquare, faCoffee } from '@fortawesome/free-solid-svg-icons'
+
+library.add(fab, faCheckSquare, faCoffee)
 
 const GlobalStyle = createGlobalStyle`
 * {
@@ -15,7 +19,7 @@ const GlobalStyle = createGlobalStyle`
   outline: 0;
 }
 body, html {
-  background: #eee;
+  background: #ffffff;
   font-family: 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
   text-rendering: optimizeLegibility !important;
   -webkit-font-smoothing: antialiased !important;
@@ -26,6 +30,7 @@ table {
   width: 100%;
   border: 1px solid black;
   border-collapse: collapse;
+  background: #ffffff;
   th,
   td {
     border: 1px solid black;
@@ -35,18 +40,20 @@ table {
   td,
   tr {
     padding: 5px;
-  }
+  },
   th {
     text-align: left;
   }
   }
 `;
-const App = ()=> {
-    return (
-      <Layout>
-        <GlobalStyle />
-        <Routes />
-      </Layout>
-    );
+
+function App() {
+  return (
+    <Layout>
+      <GlobalStyle />
+      <Routes />
+    </Layout>
+  );
 }
-export default App ;
+
+export default App;
