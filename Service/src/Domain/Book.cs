@@ -38,8 +38,8 @@ namespace Domain
         public Guid CategoryId { get; set; }
         public string PublishingCompany { get; set; }
         public Boolean Rented { get; set; }
-        public bit[] image { get; set; }
-        
+        // public bit[] image { get; set; }
+
         public void update(Book model)
         {
             Title = model.Title;
