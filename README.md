@@ -17,12 +17,14 @@ cd Service/src
 dotnet restore
 dotnet build
 
-cd Api/ 
 ```
 
 ## migrations
 
 ```
+
+cd Service/src/Api/ 
+
 dotnet-ef migrations add InitialCreate --output-dir migrations
 ```
 ## atualizar database
