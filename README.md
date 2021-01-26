@@ -30,19 +30,17 @@ dotnet-ef migrations add InitialCreate --output-dir migrations
 ``
 dotnet ef database update
 ``
-
-## Rodar api
-
-
 ## Rodar api
 
 ``
 cd Service/src/api
 dotnet run
 https://localhost:5001/swagger
+
 ``
 
 ### login 
+
 ``
 /api/v1/Authentication/login
 
@@ -52,4 +50,3 @@ https://localhost:5001/swagger
 }
 
 ``
-
