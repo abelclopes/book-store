@@ -36,7 +36,13 @@ dotnet ef database update
 ```
 cd Service/src/api
 dotnet run
-https://localhost:5001/swagger
+
+```
+
+
+### Swagger
+```
+https://localhost:5001/
 
 ```
 

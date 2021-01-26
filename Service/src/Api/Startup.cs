@@ -178,6 +178,7 @@ namespace Api
 
             app.UseEndpoints(endpoints =>
             {
+                
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
@@ -192,7 +193,9 @@ namespace Api
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Book Store API V1");
+                c.InjectStylesheet("/swagger/custom.css");
+                c.RoutePrefix = String.Empty;
             });
 
             // app.UseSpa(spa =>
