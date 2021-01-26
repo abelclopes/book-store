@@ -12,37 +12,37 @@ cd cliente-app/ &&  npm i && npm run start
 
 
 ## Build e restore
-``
+```
 cd Service/src
 dotnet restore
 dotnet build
 
 cd Api/ 
-``
+```
 
 ## migrations
 
-``
+```
 dotnet-ef migrations add InitialCreate --output-dir migrations
-``
+```
 ## atualizar database
 
-``
+```
 dotnet ef database update
-``
+```
 
 ## Rodar api
 
-``
+```
 cd Service/src/api
 dotnet run
 https://localhost:5001/swagger
 
-``
+```
 
 ### login  
 
-``
+```
 /api/v1/Authentication/login
 
 {
@@ -50,4 +50,4 @@ https://localhost:5001/swagger
   "password": "teste123"
 }
 
-``
+```
