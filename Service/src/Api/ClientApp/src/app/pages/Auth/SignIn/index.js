@@ -26,10 +26,9 @@ const SignIn = () => {
         login(response.data.token);
         history.push("/home");
       } catch (err) {
-        setError({
-          error:
+        setError(
             "Houve um problema com o login, verifique suas credenciais. T.T"
-        });
+        );
       }
     }
   };
