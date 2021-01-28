@@ -4,7 +4,7 @@ import BookService from "../service/books.service";
 import moment from "moment";
 
 import { faBackward, faBook } from "@fortawesome/free-solid-svg-icons";
-import UserService from "./../../Auth/SignUp/service/signUp.service";
+import UserService from "../../Auth/SignUp/service/signUp.service";
 import { Container } from "./styles";
 import {
   BookLine,

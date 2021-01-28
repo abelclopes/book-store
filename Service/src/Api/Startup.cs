@@ -60,7 +60,7 @@ namespace Api
                         .WithHeaders(HeaderNames.ContentType, "x-custom-header")
                         .WithMethods("PUT", "DELETE", "GET", "OPTIONS")
                             .WithMethods("PUT", "DELETE", "GET", "OPTIONS");
-                    });                              
+                    });
             });
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
@@ -83,6 +83,30 @@ namespace Api
                         Url = new Uri("https://example.com/license"),
                     }
                 });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme (Example: 'Bearer 12345abcdef')",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
+
             });
             // Configure JWT authentication.
             var key = Encoding.ASCII.GetBytes(Settings.Secret);
@@ -104,9 +128,9 @@ namespace Api
                     ValidateAudience = false
                 };
             });
-           
+
             services.Configure<GzipCompressionProviderOptions>(options => options.Level = System.IO.Compression.CompressionLevel.Optimal);
-           
+
             services.AddResponseCompression(options =>
             {
                 options.MimeTypes = new[]
@@ -154,12 +178,13 @@ namespace Api
 
             app.UseEndpoints(endpoints =>
             {
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
             });
 
-             // Enable middleware to serve generated Swagger as a JSON endpoint.
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger(c =>
             {
                 c.SerializeAsV2 = true;
@@ -168,18 +193,20 @@ namespace Api
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Book Store API V1");
+                // c.InjectStylesheet("/swagger/custom.css");
+                // c.RoutePrefix = String.Empty;
             });
 
-            // app.UseSpa(spa =>
-            // {
-            //     spa.Options.SourcePath = "ClientApp";
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "ClientApp";
 
-            //     if (env.IsDevelopment())
-            //     {
-            //         spa.UseReactDevelopmentServer(npmScript: "start");
-            //     }
-            // });
+                if (env.IsDevelopment())
+                {
+                    spa.UseReactDevelopmentServer(npmScript: "start");
+                }
+            });
 
             using var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
             var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();

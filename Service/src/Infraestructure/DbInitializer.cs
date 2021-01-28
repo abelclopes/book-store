@@ -110,10 +110,10 @@ namespace Infraestructure.Data
                 {
                     // senha é teste123
                     new User { Id = Guid.NewGuid(),
-                            Name = "Abel Lopes",
+                            Name = "Administrador",
                             Cpf = "99999999999",
-                            Username = "abellopes",
-                            Email = "abellopes@gmail.com" ,
+                            Username = "admin",
+                            Email = "admin@gmail.com" ,
                             Password = "2242461295221015719538209212227614317113501631961762",
                             Role= context.Roles.Any()? context.Roles.FirstOrDefault(x=> x.Id.ToString() == "2A367317-7BF8-45A2-89D5-74B8E8D54D3B").Name : myRoles.FirstOrDefault().Name
                     },
