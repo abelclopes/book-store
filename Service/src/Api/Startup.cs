@@ -178,7 +178,7 @@ namespace Api
 
             app.UseEndpoints(endpoints =>
             {
-                
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
@@ -194,19 +194,19 @@ namespace Api
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Book Store API V1");
-                c.InjectStylesheet("/swagger/custom.css");
-                c.RoutePrefix = String.Empty;
+                // c.InjectStylesheet("/swagger/custom.css");
+                // c.RoutePrefix = String.Empty;
             });
 
-            // app.UseSpa(spa =>
-            // {
-            //     spa.Options.SourcePath = "ClientApp";
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "ClientApp";
 
-            //     if (env.IsDevelopment())
-            //     {
-            //         spa.UseReactDevelopmentServer(npmScript: "start");
-            //     }
-            // });
+                if (env.IsDevelopment())
+                {
+                    spa.UseReactDevelopmentServer(npmScript: "start");
+                }
+            });
 
             using var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
             var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
