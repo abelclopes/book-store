@@ -5,7 +5,7 @@ docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Atec@Password!' -p 1401:1433 -d --
 docker exec -it db_book_sql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'Atec@Password!'
 
 ## CLIENTE REACT
-versao do cliente react no monolito esta com problema de build
+versao do cliente react no monolito esta com problema de build, usei cliente separado
 
 ## RUN APP
 cd cliente-app/ &&  npm i && npm run start
@@ -17,12 +17,14 @@ cd Service/src
 dotnet restore
 dotnet build
 
-cd Api/ 
 ```
 
 ## migrations
 
 ```
+
+cd Service/src/Api/ 
+
 dotnet-ef migrations add InitialCreate --output-dir migrations
 ```
 ## atualizar database
